@@ -91,6 +91,7 @@ describe Relax do
         Relax.callback = Proc.new { |e| @event = e; @thread.join }
 
         @redis.rpush(ENV['RELAX_EVENTS_QUEUE'], {
+          type: 'message_new',
           user_uid: 'user_uid',
           channel_uid: 'channel_uid',
           team_uid: 'team_uid',
@@ -111,6 +112,7 @@ describe Relax do
         Thread.pass while !@event
 
         expect(@event).to be_a(Relax::Event)
+        expect(@event.type).to eql 'message_new'
         expect(@event.user_uid).to eql 'user_uid'
         expect(@event.channel_uid).to eql 'channel_uid'
         expect(@event.team_uid).to eql 'team_uid'

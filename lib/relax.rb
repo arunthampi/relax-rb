@@ -4,7 +4,7 @@ require "json"
 
 class Relax
   class Event
-    attr_accessor :user_uid, :channel_uid, :team_uid, :im, :text,
+    attr_accessor :type, :user_uid, :channel_uid, :team_uid, :im, :text,
                   :relax_bot_uid, :timestamp, :provider, :event_timestamp
 
     def initialize(opts = {})
