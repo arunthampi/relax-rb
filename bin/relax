@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require "relax"
+
+puts "Listening for Relax Events"
+Relax.listen_for_events

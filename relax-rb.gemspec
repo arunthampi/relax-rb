@@ -4,14 +4,14 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'relax/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "relax-rb"
+  spec.name          = "relax"
   spec.version       = VERSION
   spec.authors       = ["arunthampi"]
-  spec.email         = ["arun.thampi@gmail.com"]
+  spec.email         = ["arun@zerobotlabs.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{relax-rb is a Ruby Client for Relax, which is a message broker for Slack's Real-Time API}
+  spec.description   = %q{relax-rb is a Ruby Client for Relax, which is a message broker for Slack's Real-Time API}
+  spec.homepage      = "http://relax.zerobotlabs.com"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
@@ -23,8 +23,8 @@ Gem::Specification.new do |spec|
   end
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.bindir        = "bin"
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   spec.add_dependency             "redis",   "~> 3.2.1"
