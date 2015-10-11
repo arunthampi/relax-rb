@@ -2,6 +2,8 @@
 
 Relax is a Ruby client/consumer library for [relax](https://github.com/zerobotlabs/relax) &ndash; which is a multitenant message broker for Slack.
 
+![Travis Badge for relax-rb](https://api.travis-ci.org/zerobotlabs/relax-rb.svg?branch=master)
+
 ## Installation
 
 Add this line to your application's Gemfile:
