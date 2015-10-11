@@ -1,1 +1,3 @@
-VERSION = "0.1.0"
+module Relax
+  VERSION = "0.1.0"
+end

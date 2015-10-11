@@ -5,7 +5,7 @@ require 'relax/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "relax"
-  spec.version       = VERSION
+  spec.version       = Relax::VERSION
   spec.authors       = ["arunthampi"]
   spec.email         = ["arun@zerobotlabs.com"]
 
