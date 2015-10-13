@@ -9,7 +9,7 @@ Relax is a Ruby client/consumer library for [relax](https://github.com/zerobotla
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'relax'
+gem 'relax-rb', require: 'relax'
 ```
 
 And then execute:
