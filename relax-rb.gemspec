@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'relax/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "relax"
+  spec.name          = "relax-rb"
   spec.version       = Relax::VERSION
   spec.authors       = ["arunthampi"]
   spec.email         = ["arun@zerobotlabs.com"]
