@@ -16,7 +16,10 @@ module Relax
     end
 
     def ==(other)
-      self.channel_uid == other.channel_uid && self.timestamp == other.timestamp
+      other.respond_to?('channel_uid') &&
+      other.respond_to?('timestamp') &&
+      self.channel_uid == other.channel_uid &&
+      self.timestamp == other.timestamp
     end
     alias_method :eql?, :==
   end
