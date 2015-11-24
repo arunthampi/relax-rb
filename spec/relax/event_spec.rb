@@ -29,4 +29,30 @@ describe Relax::Event do
       expect(hash[:event_timestamp]).to eql '1000000.2'
     end
   end
+
+  describe '#==' do
+    let!(:event) { Relax::Event.new(
+      type: 'message_new',
+      user_uid: 'user_uid',
+      channel_uid: 'channel_uid',
+      team_uid: 'team_uid',
+      im: true,
+      text: 'hello world',
+      relax_bot_uid: 'URELAXBOT',
+      timestamp: '1000000.1',
+      provider: 'slack',
+      event_timestamp: '1000000.2')
+    }
+
+    let(:other_event) { event.dup }
+
+    it 'should return true for event == other_event' do
+      expect(event == other_event).to be_truthy
+      expect(event).to eql other_event
+
+      other_event.timestamp = '1000000.2'
+      expect(event == other_event).to be_falsy
+      expect(event).to_not eql other_event
+    end
+  end
 end

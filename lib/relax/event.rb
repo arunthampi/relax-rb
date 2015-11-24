@@ -14,5 +14,10 @@ module Relax
       ATTRIBUTES.each { |a| hash[a] = self.send(a) }
       hash
     end
+
+    def ==(other)
+      self.channel_uid == other.channel_uid && self.timestamp == other.timestamp
+    end
+    alias_method :eql?, :==
   end
 end
