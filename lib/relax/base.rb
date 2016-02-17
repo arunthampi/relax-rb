@@ -9,7 +9,9 @@ module Relax
         redis_uri = URI.parse("redis://localhost:6379")
       end
 
-      @@redis ||= Redis.new(url: redis_uri, db: 0)
+      @@conn ||= ConnectionPool.new(timeout: 1, size: 5) do
+        Redis.new(url: redis_uri, db: 0)
+      end
     end
   end
 end

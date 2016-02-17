@@ -31,7 +31,7 @@ describe Relax::Bot do
         ENV['RELAX_BOTS_KEY'] = 'relax_bots_key'
         ENV['RELAX_BOTS_PUBSUB'] = 'relax_bots_pubsub'
 
-        Relax::Bot.redis.flushdb
+        Relax::Bot.redis.with { |c| c.flushdb }
         @redis_subscriber = Redis.new(uri: URI.parse("redis://localhost:6379"), db: 0)
       end
 

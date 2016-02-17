@@ -13,7 +13,7 @@ describe Relax::EventListener do
     context "when ENV['RELAX_EVENTS_QUEUE'] is set" do
       before do
         ENV['RELAX_EVENTS_QUEUE'] = 'relax_events_queue'
-        Relax::EventListener.redis.flushdb
+        Relax::EventListener.redis.with { |c| c.flushdb }
 
         @redis = Redis.new(uri: URI.parse("redis://localhost:6379"), db: 0)
         @thread = Thread.new { Relax::EventListener.listen! }

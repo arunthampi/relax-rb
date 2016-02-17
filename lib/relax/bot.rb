@@ -12,9 +12,11 @@ module Relax
         raise BotsPubsubNotSetError, "Environment Variable RELAX_BOTS_PUBSUB is not set"
       end
 
-      redis.multi do
-        redis.hset(relax_bots_key, team_uid, {team_id: team_uid, token: token}.to_json)
-        redis.publish(relax_bots_pubsub, {type: 'team_added', team_id: team_uid}.to_json)
+      redis.with do |conn|
+        conn.multi do
+          conn.hset(relax_bots_key, team_uid, {team_id: team_uid, token: token}.to_json)
+          conn.publish(relax_bots_pubsub, {type: 'team_added', team_id: team_uid}.to_json)
+        end
       end
     end
 

@@ -1,5 +1,6 @@
 require "redis"
 require "json"
+require "connection_pool"
 
 require "relax/version"
 require "relax/base"
