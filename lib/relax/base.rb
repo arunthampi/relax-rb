@@ -1,7 +1,9 @@
 module Relax
   class Base
     def self.redis
-      if uri = ENV['REDISTOGO_URL']
+      if uri = ENV['REDISCLOUD_URL']
+        redis_uri = URI.parse(uri)
+      elsif uri = ENV['REDISTOGO_URL']
         redis_uri = URI.parse(uri)
       elsif uri = ENV['REDIS_URL']
         redis_uri = URI.parse(uri)
