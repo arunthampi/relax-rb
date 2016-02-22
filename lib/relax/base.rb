@@ -9,9 +9,13 @@ module Relax
         redis_uri = URI.parse("redis://localhost:6379")
       end
 
-      @@conn ||= ConnectionPool.new(timeout: 1, size: 2) do
-        Redis.new(url: redis_uri, db: 0)
+      if !defined?(@@conn)
+        @@conn = ConnectionPool.new(timeout: 1, size: 2) do
+          Redis.new(url: redis_uri, db: 0)
+        end
       end
+
+      @@conn
     end
   end
 end
