@@ -40,30 +40,62 @@ describe Relax::Bot do
         ENV['RELAX_BOTS_PUBSUB'] = nil
       end
 
-      it 'should push the entry to the queue (to be consumed by nestorbot)' do
-        thread = Thread.new do
-          @redis_subscriber.subscribe(ENV['RELAX_BOTS_PUBSUB']) do |on|
-            on.subscribe do |channel, total|
-              @subscribed = true
-            end
+      context 'without namesapce' do
+        it 'should push the entry to the queue (to be consumed by nestorbot)' do
+          thread = Thread.new do
+            @redis_subscriber.subscribe(ENV['RELAX_BOTS_PUBSUB']) do |on|
+              on.subscribe do |channel, total|
+                @subscribed = true
+              end
 
-            on.message do |channel, message|
-              @pubsub_message = message
-              @redis_subscriber.unsubscribe
+              on.message do |channel, message|
+                @pubsub_message = message
+                @redis_subscriber.unsubscribe
+              end
             end
           end
+
+          Thread.pass while !@subscribed
+          Relax::Bot.start!('team_id', 'token')
+          thread.join
+
+          @message = JSON.parse(@redis_subscriber.hget(ENV['RELAX_BOTS_KEY'], 'team_id'))
+          expect(@message['team_id']).to eql 'team_id'
+          expect(@message['token']).to eql 'token'
+          expect(JSON.parse(@pubsub_message)['team_id']).to eql 'team_id'
+          expect(@subscribed).to be_truthy
         end
-
-        Thread.pass while !@subscribed
-        Relax::Bot.start!('team_id', 'token')
-        thread.join
-
-        @message = JSON.parse(@redis_subscriber.hget(ENV['RELAX_BOTS_KEY'], 'team_id'))
-        expect(@message['team_id']).to eql 'team_id'
-        expect(@message['token']).to eql 'token'
-        expect(JSON.parse(@pubsub_message)['team_id']).to eql 'team_id'
-        expect(@subscribed).to be_truthy
       end
+
+      context 'with namesapce' do
+        it 'should push the entry to the queue (to be consumed by nestorbot) with the namespace' do
+          thread = Thread.new do
+            @redis_subscriber.subscribe(ENV['RELAX_BOTS_PUBSUB']) do |on|
+              on.subscribe do |channel, total|
+                @subscribed = true
+              end
+
+              on.message do |channel, message|
+                @pubsub_message = message
+                @redis_subscriber.unsubscribe
+              end
+            end
+          end
+
+          Thread.pass while !@subscribed
+          Relax::Bot.start!('team_id', 'token', namespace: 'namespace')
+          thread.join
+
+          @message = JSON.parse(@redis_subscriber.hget(ENV['RELAX_BOTS_KEY'], 'namespace-team_id'))
+          expect(@message['team_id']).to eql 'team_id'
+          expect(@message['token']).to eql 'token'
+          expect(@message['namespace']).to eql 'namespace'
+
+          expect(JSON.parse(@pubsub_message)['team_id']).to eql 'team_id'
+          expect(@subscribed).to be_truthy
+        end
+      end
+
     end
   end
 

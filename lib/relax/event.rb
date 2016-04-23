@@ -1,7 +1,8 @@
 module Relax
   class Event
     ATTRIBUTES = [:type, :user_uid, :channel_uid, :team_uid, :im, :text,
-                  :relax_bot_uid, :timestamp, :provider, :event_timestamp]
+                  :relax_bot_uid, :timestamp, :provider, :event_timestamp,
+                  :namespace]
 
     attr_accessor *ATTRIBUTES
 

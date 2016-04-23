@@ -5,7 +5,7 @@ module Relax
   class BotsPubsubNotSetError < StandardError; end
 
   class Bot < Base
-    def self.start!(team_uid, token)
+    def self.start!(team_uid, token, opts = {})
       if relax_bots_key.nil? || relax_bots_key == ""
         raise BotsKeyNotSetError, "Environment Variable RELAX_BOTS_KEY is not set"
       end
@@ -14,9 +14,14 @@ module Relax
         raise BotsPubsubNotSetError, "Environment Variable RELAX_BOTS_PUBSUB is not set"
       end
 
+      namespace = (opts[:namespace] || opts['namespace']).to_s.strip
+      hset_payload = {team_id: team_uid, token: token}
+      hset_payload.merge!(namespace: namespace) if namespace != ""
+      key = namespace == "" ? team_uid : "#{namespace}-#{team_uid}"
+
       redis.with do |conn|
         conn.multi do
-          conn.hset(relax_bots_key, team_uid, {team_id: team_uid, token: token}.to_json)
+          conn.hset(relax_bots_key, key, hset_payload.to_json)
           conn.publish(relax_bots_pubsub, {type: 'team_added', team_id: team_uid}.to_json)
         end
       end
