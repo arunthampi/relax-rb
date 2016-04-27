@@ -62,7 +62,11 @@ describe Relax::Bot do
           @message = JSON.parse(@redis_subscriber.hget(ENV['RELAX_BOTS_KEY'], 'team_id'))
           expect(@message['team_id']).to eql 'team_id'
           expect(@message['token']).to eql 'token'
-          expect(JSON.parse(@pubsub_message)['team_id']).to eql 'team_id'
+          expect(@message['namespace']).to be_nil
+
+          m = JSON.parse(@pubsub_message)
+          expect(m['team_id']).to eql 'team_id'
+          expect(m['namespace']).to be_nil
           expect(@subscribed).to be_truthy
         end
       end
@@ -91,7 +95,9 @@ describe Relax::Bot do
           expect(@message['token']).to eql 'token'
           expect(@message['namespace']).to eql 'namespace'
 
-          expect(JSON.parse(@pubsub_message)['team_id']).to eql 'team_id'
+          m = JSON.parse(@pubsub_message)
+          expect(m['team_id']).to eql 'team_id'
+          expect(m['namespace']).to eql 'namespace'
           expect(@subscribed).to be_truthy
         end
       end

@@ -18,11 +18,13 @@ module Relax
       hset_payload = {team_id: team_uid, token: token}
       hset_payload.merge!(namespace: namespace) if namespace != ""
       key = namespace == "" ? team_uid : "#{namespace}-#{team_uid}"
+      pubsub_payload = {type: 'team_added', team_id: team_uid}
+      pubsub_payload.merge!(namespace: namespace) if namespace != ""
 
       redis.with do |conn|
         conn.multi do
           conn.hset(relax_bots_key, key, hset_payload.to_json)
-          conn.publish(relax_bots_pubsub, {type: 'team_added', team_id: team_uid}.to_json)
+          conn.publish(relax_bots_pubsub, pubsub_payload.to_json)
         end
       end
     end
