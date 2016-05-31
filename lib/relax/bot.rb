@@ -29,6 +29,28 @@ module Relax
       end
     end
 
+    def self.stop!(team_uid, opts = {})
+      if relax_bots_key.nil? || relax_bots_key == ""
+        raise BotsKeyNotSetError, "Environment Variable RELAX_BOTS_KEY is not set"
+      end
+
+      if relax_bots_pubsub.nil? || relax_bots_pubsub == ""
+        raise BotsPubsubNotSetError, "Environment Variable RELAX_BOTS_PUBSUB is not set"
+      end
+
+      namespace = (opts[:namespace] || opts['namespace']).to_s.strip
+      key = namespace == "" ? team_uid : "#{namespace}-#{team_uid}"
+      pubsub_payload = {type: 'team_removed', team_id: team_uid}
+      pubsub_payload.merge!(namespace: namespace) if namespace != ""
+
+      redis.with do |conn|
+        conn.multi do
+          conn.hdel(relax_bots_key, key)
+          conn.publish(relax_bots_pubsub, pubsub_payload.to_json)
+        end
+      end
+    end
+
     def self.start_typing!(team_uid, channel_uid)
       if relax_bots_key.nil? || relax_bots_key == ""
         raise BotsKeyNotSetError, "Environment Variable RELAX_BOTS_KEY is not set"
